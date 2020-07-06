@@ -2,10 +2,10 @@ import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import authconfig from '../config/auth';
-import AppError from '../errors/AppError';
+import authconfig from '@config/auth';
+import AppError from '@shared/errors/AppError';
 
-import User from '../models/Users';
+import Users from '@modules/users/infra/typeorm/entities/Users';
 
 interface ResquestDTO {
   email: string;
@@ -13,13 +13,13 @@ interface ResquestDTO {
 }
 
 interface Response {
-  user: User;
+  user: Users;
   token: string;
 }
 
 class Authentication {
   public async execute({ email, password }: ResquestDTO): Promise<Response> {
-    const repository = getRepository(User);
+    const repository = getRepository(Users);
 
     const user = await repository.findOne({ where: { email } });
     if (!user) {
