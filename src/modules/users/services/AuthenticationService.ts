@@ -1,4 +1,3 @@
-import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
@@ -6,22 +5,23 @@ import authconfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
 import Users from '@modules/users/infra/typeorm/entities/Users';
+import IUsersRepository from '../repositories/IUsersRepositories';
 
-interface ResquestDTO {
+interface IResquestDTO {
   email: string;
   password: string;
 }
 
-interface Response {
+interface IResponse {
   user: Users;
   token: string;
 }
 
 class Authentication {
-  public async execute({ email, password }: ResquestDTO): Promise<Response> {
-    const repository = getRepository(Users);
+  constructor(private usersRepository: IUsersRepository) {}
 
-    const user = await repository.findOne({ where: { email } });
+  public async execute({ email, password }: IResquestDTO): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new AppError('Incorrect email/password combination', 401);
     }
