@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 
+import { injectable, inject } from 'tsyringe';
+
 import Users from '@modules/users/infra/typeorm/entities/Users';
 
 import AppError from '@shared/errors/AppError';
@@ -12,8 +14,12 @@ interface IRequestDTO {
   avatarFilename: string;
 }
 
+@injectable()
 class UpdateUserImageService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository
+  ) {}
 
   public async execute({ id, avatarFilename }: IRequestDTO): Promise<Users> {
     const user = await this.usersRepository.findById(id);
