@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 
-import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { injectable, inject } from 'tsyringe';
 
@@ -8,6 +7,7 @@ import authconfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
 import Users from '@modules/users/infra/typeorm/entities/Users';
+import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepositories';
 
 interface IResquestDTO {
@@ -24,7 +24,10 @@ interface IResponse {
 class Authentication {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
   public async execute({ email, password }: IResquestDTO): Promise<IResponse> {
@@ -33,7 +36,10 @@ class Authentication {
     if (!user) {
       throw new AppError('Incorrect email/password combination', 401);
     }
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await this.hashProvider.compareHash(
+      password,
+      user.password
+    );
     if (!passwordMatch) {
       throw new AppError('Incorrect email/password combination', 401);
     }
