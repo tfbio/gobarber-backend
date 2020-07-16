@@ -1,14 +1,11 @@
 import 'reflect-metadata';
 
-import path from 'path';
-import fs from 'fs';
-
 import { injectable, inject } from 'tsyringe';
 
 import Users from '@modules/users/infra/typeorm/entities/Users';
 
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
+import IStorageProvider from '@shared/container/providers/models/IStorageProvider';
 import IUsersRepository from '../repositories/IUsersRepositories';
 
 interface IRequestDTO {
@@ -20,7 +17,10 @@ interface IRequestDTO {
 class UpdateUserImageService {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider
   ) {}
 
   public async execute({ id, avatarFilename }: IRequestDTO): Promise<Users> {
@@ -31,15 +31,12 @@ class UpdateUserImageService {
     }
 
     if (user.avatar) {
-      const userAvatarPath = path.join(uploadConfig.directory, user.avatar);
-      const userAvatarExists = await fs.promises.stat(userAvatarPath);
-
-      if (userAvatarExists) {
-        await fs.promises.unlink(userAvatarPath);
-      }
+      await this.storageProvider.deleteFile(user.avatar);
     }
 
-    user.avatar = avatarFilename;
+    const updatedFilename = await this.storageProvider.saveFile(avatarFilename);
+
+    user.avatar = updatedFilename;
     await this.usersRepository.save(user);
 
     return user;

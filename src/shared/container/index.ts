@@ -9,6 +9,9 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
+import IStorageProvider from '@shared/container/providers/models/IStorageProvider';
+import LocalDiskStorageProvider from '@shared/container/providers/implementations/LocalDiskStorageProvider';
+
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
   AppointmentsRepository
@@ -20,3 +23,8 @@ container.registerSingleton<IUsersRepositories>(
 );
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
+
+container.registerSingleton<IStorageProvider>(
+  'StorageProvider',
+  LocalDiskStorageProvider
+);
