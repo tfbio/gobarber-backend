@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 
 import { injectable, inject } from 'tsyringe';
-/*
+
 import AppError from '@shared/errors/AppError';
-import Users from '@modules/users/infra/typeorm/entities/Users';
-*/
 import IMailingProvider from '@shared/container/providers/MailingProvider/models/IMailingProvider';
-import AppError from '@shared/errors/AppError';
+import IUserTokensRepositories from '../repositories/IUserTokensRepositories';
 import IUsersRepository from '../repositories/IUsersRepositories';
 
 interface IRequestDTO {
@@ -19,17 +17,21 @@ class SendForgottenPasswordService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
+    @inject('userTokenRepositories')
+    private userTokenRepositories: IUserTokensRepositories,
+
     @inject('MailingProvider')
     private mailingProvider: IMailingProvider
   ) {}
 
   public async execute({ email }: IRequestDTO): Promise<void> {
-    const verifyEmail = await this.usersRepository.findByEmail(email);
-    if (!verifyEmail) {
+    const user = await this.usersRepository.findByEmail(email);
+    if (!user) {
       throw new AppError('Email is invalid or not registered');
     }
 
     await this.mailingProvider.sendEmail(email, 'test email content');
+    await this.userTokenRepositories.generate(user.id);
   }
 }
 

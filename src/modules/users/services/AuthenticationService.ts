@@ -36,10 +36,12 @@ class Authentication {
     if (!user) {
       throw new AppError('Incorrect email/password combination', 401);
     }
+
     const passwordMatch = await this.hashProvider.compareHash(
       password,
       user.password
     );
+
     if (!passwordMatch) {
       throw new AppError('Incorrect email/password combination', 401);
     }
