@@ -1,10 +1,12 @@
 import 'reflect-metadata';
 
 import { injectable, inject } from 'tsyringe';
+import { isAfter, addHours } from 'date-fns';
 
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepositories';
 import IUserTokensRepositories from '../repositories/IUserTokensRepositories';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface IRequestDTO {
   password: string;
@@ -17,8 +19,11 @@ class SendForgottenPasswordService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('userTokenRepositories')
-    private userTokenRepositories: IUserTokensRepositories
+    @inject('UserTokenRepositories')
+    private userTokenRepositories: IUserTokensRepositories,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
   public async execute({ password, token }: IRequestDTO): Promise<void> {
@@ -34,7 +39,14 @@ class SendForgottenPasswordService {
       throw new AppError('User does not exists');
     }
 
-    user.password = password;
+    const tokenCreatedAt = userToken.created_at;
+    const compareHours = addHours(tokenCreatedAt, 48);
+
+    if (isAfter(Date.now(), compareHours)) {
+      throw new AppError('token expired.');
+    }
+
+    user.password = await this.hashProvider.generateHash(password);
     this.usersRepository.save(user);
   }
 }
