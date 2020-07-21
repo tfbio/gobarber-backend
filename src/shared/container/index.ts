@@ -12,8 +12,8 @@ import BCryptHashProvider from '@modules/users/providers/HashProvider/implementa
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import LocalDiskStorageProvider from '@shared/container/providers/StorageProvider/implementations/LocalDiskStorageProvider';
 
-// import IMailingProvider from '@shared/container/providers/MailingProvider/models/IMailingProvider';
-// import  from '@shared/container/providers/MailingProvider/implementations/';
+import IMailingProvider from '@shared/container/providers/MailingProvider/models/IMailingProvider';
+import EtherealMailingProvider from '@shared/container/providers/MailingProvider/implementations/EtherealMailingProvider';
 
 import UserTokenRepository from '@modules/users/infra/typeorm/repositories/UserTokenRepository';
 import IUsersToken from '@modules/users/repositories/IUserTokensRepositories';
@@ -38,4 +38,9 @@ container.registerSingleton<IStorageProvider>(
 container.registerSingleton<IUsersToken>(
   'UserTokenRepositories',
   UserTokenRepository
+);
+
+container.registerInstance<IMailingProvider>(
+  'MailingProvider',
+  new EtherealMailingProvider()
 );

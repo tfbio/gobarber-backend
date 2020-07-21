@@ -16,6 +16,7 @@ class UserTokenRepository implements IUsersToken {
     });
 
     await this.ormRepository.save(userToken);
+
     return userToken;
   }
 

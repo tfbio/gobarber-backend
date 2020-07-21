@@ -26,12 +26,17 @@ class SendForgottenPasswordService {
 
   public async execute({ email }: IRequestDTO): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
+
     if (!user) {
       throw new AppError('Email is invalid or not registered');
     }
 
-    await this.mailingProvider.sendEmail(email, 'test email content');
-    await this.userTokenRepositories.generate(user.id);
+    const { token } = await this.userTokenRepositories.generate(user.id);
+
+    await this.mailingProvider.sendEmail(
+      email,
+      `Password recovery email content ${token}`
+    );
   }
 }
 
