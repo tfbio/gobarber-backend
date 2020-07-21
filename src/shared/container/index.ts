@@ -15,8 +15,8 @@ import LocalDiskStorageProvider from '@shared/container/providers/StorageProvide
 // import IMailingProvider from '@shared/container/providers/MailingProvider/models/IMailingProvider';
 // import  from '@shared/container/providers/MailingProvider/implementations/';
 
-// import I from '@modules/users/repositories/IUserTokensRepositories';
-// import d from '@modules/users/infra/typeorm/;'
+import UserTokenRepository from '@modules/users/infra/typeorm/repositories/UserTokenRepository';
+import IUsersToken from '@modules/users/repositories/IUserTokensRepositories';
 
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
@@ -33,4 +33,9 @@ container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   LocalDiskStorageProvider
+);
+
+container.registerSingleton<IUsersToken>(
+  'UserTokenRepositories',
+  UserTokenRepository
 );
