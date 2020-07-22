@@ -43,12 +43,12 @@ container.registerSingleton<IUsersToken>(
   UserTokenRepository
 );
 
-container.registerInstance<IMailingProvider>(
-  'MailingProvider',
-  new EtherealMailingProvider()
-);
-
 container.registerSingleton<IMailTemplateProvider>(
   'MailTemplateProvider',
   HandlebarsMailTemplateProvider
+);
+
+container.registerInstance<IMailingProvider>(
+  'MailingProvider',
+  container.resolve(EtherealMailingProvider)
 );

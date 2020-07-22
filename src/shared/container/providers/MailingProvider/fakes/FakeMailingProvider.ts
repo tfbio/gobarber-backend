@@ -1,18 +1,11 @@
 import IMailingProvider from '../models/IMailingProvider';
-
-interface IEmailFormat {
-  to: string;
-  content: string;
-}
+import ISendMailDTO from '../DTOs/ISendMailDTO';
 
 class FakeIMailingProvider implements IMailingProvider {
-  private emailSent: IEmailFormat[] = [];
+  private emailSent: ISendMailDTO[] = [];
 
-  public async sendEmail(to: string, content: string): Promise<void> {
-    this.emailSent.push({
-      to,
-      content,
-    });
+  public async sendEmail(message: ISendMailDTO): Promise<void> {
+    this.emailSent.push(message);
   }
 }
 

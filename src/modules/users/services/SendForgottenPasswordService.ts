@@ -33,10 +33,20 @@ class SendForgottenPasswordService {
 
     const { token } = await this.userTokenRepositories.generate(user.id);
 
-    await this.mailingProvider.sendEmail(
-      email,
-      `Password recovery email content ${token}`
-    );
+    await this.mailingProvider.sendEmail({
+      to: {
+        name: user.name,
+        email: user.email,
+      },
+      subject: '[GoBarber] Password Recovery',
+      templateData: {
+        template: 'Olá, {{name}}, {{token}}',
+        variables: {
+          name: user.name,
+          token,
+        },
+      },
+    });
   }
 }
 
