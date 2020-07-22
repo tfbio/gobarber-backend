@@ -18,6 +18,9 @@ import EtherealMailingProvider from '@shared/container/providers/MailingProvider
 import UserTokenRepository from '@modules/users/infra/typeorm/repositories/UserTokenRepository';
 import IUsersToken from '@modules/users/repositories/IUserTokensRepositories';
 
+import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
+import HandlebarsMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/implementations/HandlebarsMailTemplateProvider';
+
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
   AppointmentsRepository
@@ -43,4 +46,9 @@ container.registerSingleton<IUsersToken>(
 container.registerInstance<IMailingProvider>(
   'MailingProvider',
   new EtherealMailingProvider()
+);
+
+container.registerSingleton<IMailTemplateProvider>(
+  'MailTemplateProvider',
+  HandlebarsMailTemplateProvider
 );
