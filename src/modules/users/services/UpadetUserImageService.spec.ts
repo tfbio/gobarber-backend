@@ -5,16 +5,21 @@ import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
 
 import UpdateUserImageService from './UpdateUserImageService';
 
-describe('UpdateUserImage', () => {
-  it('should be able to change user profile image', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUserRepository = new FakeUserRepository();
+let fakeStorageProvider: FakeStorageProvider;
+let fakeUserRepository: FakeUserRepository;
+let updateUserImgService: UpdateUserImageService;
 
-    const updateUserImgService = new UpdateUserImageService(
+describe('UpdateUserImage', () => {
+  beforeEach(() => {
+    fakeStorageProvider = new FakeStorageProvider();
+    fakeUserRepository = new FakeUserRepository();
+    updateUserImgService = new UpdateUserImageService(
       fakeUserRepository,
       fakeStorageProvider
     );
+  });
 
+  it('should be able to change user profile image', async () => {
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
 
     const user = await fakeUserRepository.create({
@@ -38,14 +43,6 @@ describe('UpdateUserImage', () => {
   });
 
   it('should not be able to change profile image for  unauthenticated users', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUserRepository = new FakeUserRepository();
-
-    const updateUserImgService = new UpdateUserImageService(
-      fakeUserRepository,
-      fakeStorageProvider
-    );
-
     await expect(
       updateUserImgService.execute({
         id: 'unauthenticatedUserId',
