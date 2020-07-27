@@ -1,4 +1,3 @@
-import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
 import IMailTemplateDTO from '../../MailTemplateProvider/DTOs/IMailTemplateDTO';
 
 interface IMailContact {

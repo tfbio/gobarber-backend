@@ -3,6 +3,6 @@ interface ITemplateVariable {
 }
 
 export default interface IMailTemplateDTO {
-  template: string;
+  file: string;
   variables: ITemplateVariable;
 }
