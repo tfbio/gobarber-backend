@@ -30,7 +30,7 @@ class SendForgottenPasswordService {
     const userToken = await this.userTokenRepositories.findByToken(token);
 
     if (!userToken) {
-      throw new AppError('User Token does not exists');
+      throw new AppError('Token does not exists');
     }
 
     const user = await this.usersRepository.findById(userToken.user_id);

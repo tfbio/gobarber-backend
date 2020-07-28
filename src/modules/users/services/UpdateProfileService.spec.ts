@@ -35,6 +35,33 @@ describe('UpdateProfile', () => {
     expect(updatedUser.email).toBe('email2@hotmail.com');
   });
 
+  it('should not be able to update profile of non-existent user', async () => {
+    await expect(
+      updateProfileService.execute({
+        user_id: 'non-existent-user-id',
+        name: 'John Doe',
+        email: 'email@hotmail.com',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('must provide old password to change user password', async () => {
+    const user = await fakeUserRepository.create({
+      name: 'John',
+      email: 'email@email.com',
+      password: '123456',
+    });
+
+    await expect(
+      updateProfileService.execute({
+        user_id: user.id,
+        name: 'John',
+        email: 'email@email.com',
+        newPassword: '456123',
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
   it('should be able to change password providing correct old password', async () => {
     const user = await fakeUserRepository.create({
       name: 'John',
