@@ -11,7 +11,7 @@ let fakeHashProvider: FakeBCryptHashProvider;
 
 let resetPasswordService: ResetPasswordService;
 
-describe('SendForgottenPassword', () => {
+describe('ResetPassword', () => {
   beforeEach(() => {
     fakeUserRepository = new FakeUserRepository();
     fakeUserTokensRepository = new FakeUserTokensRepository();
