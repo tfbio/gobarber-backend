@@ -6,4 +6,5 @@ export default interface IUsersRepositories {
   save(user: Users): Promise<Users>;
   findByEmail(email: string): Promise<Users | undefined>;
   findById(id: string): Promise<Users | undefined>;
+  findAllProviders(except_id?: string): Promise<Users[]>;
 }
