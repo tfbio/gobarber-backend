@@ -3,8 +3,6 @@ import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
 import Users from '@modules/users/infra/typeorm/entities/Users';
-
-import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepositories';
 
 interface IRequestDTO {
@@ -18,12 +16,10 @@ class ListProviderService {
     private usersRepository: IUsersRepository
   ) {}
 
-  public async execute({ user_id }: IRequestDTO): Promise<Users> {
-    const user = await this.usersRepository.findById(user_id);
-
-    if (!user) {
-      throw new AppError('User not found.');
-    }
+  public async execute({ user_id }: IRequestDTO): Promise<Users[]> {
+    const user = await this.usersRepository.findAllProviders({
+      except_id: user_id,
+    });
 
     return user;
   }

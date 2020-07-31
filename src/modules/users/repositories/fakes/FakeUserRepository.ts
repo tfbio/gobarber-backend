@@ -4,6 +4,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepositories';
 
 import ICreateAppointmentDTO from '@modules/users/DTOs/ICreateUserDTO';
 import Users from '@modules/users/infra/typeorm/entities/Users';
+import IFindAllProviderDTO from '../../DTOs/IFindAllProviderDTO';
 
 class FakeUsersRepository implements IUsersRepository {
   private users: Users[] = [];
@@ -44,7 +45,9 @@ class FakeUsersRepository implements IUsersRepository {
     return userFound;
   }
 
-  public async findAllProviders(except_id?: string): Promise<Users[]> {
+  public async findAllProviders({
+    except_id,
+  }: IFindAllProviderDTO): Promise<Users[]> {
     let usersList = this.users;
 
     if (except_id) {
