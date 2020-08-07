@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { getHours } from 'date-fns';
+import { getHours, isAfter } from 'date-fns';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -43,14 +43,19 @@ class ListProviderDayAvailabilityService {
       (_, index) => index + workHourStart
     );
 
+    const currentDate = new Date(Date.now());
+
     const availability = forEachHour.map(hour => {
       const appointmentInHour = appointments.find(
         appointment => getHours(appointment.date) === hour
       );
+      const appointmentDate = new Date(year, month - 1, day, hour);
+
+      const dateCompare = isAfter(appointmentDate, currentDate);
 
       return {
         hour,
-        availability: !appointmentInHour,
+        availability: !appointmentInHour && dateCompare,
       };
     });
 
