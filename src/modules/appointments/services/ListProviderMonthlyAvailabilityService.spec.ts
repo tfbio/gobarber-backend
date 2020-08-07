@@ -12,7 +12,7 @@ describe('ListProviderMonthlyAvailability', () => {
     );
   });
 
-  it('should be able to list all providers', async () => {
+  it('should be able to list availablility in a month', async () => {
     await fakeAppointmentRepository.create({
       date: new Date(2020, 6, 20, 7, 0, 0),
       provider_id: 'user',
