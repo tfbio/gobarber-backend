@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 // Eu adicionei este import acima para resolver problema nos testes jest, deixar em observação esta linha
-import { startOfHour } from 'date-fns';
+import { startOfHour, isBefore } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -32,6 +32,10 @@ class CreateAppointmentService {
 
     if (checkDuplicateSchedule) {
       throw new AppError('This appointment time is already booked');
+    }
+
+    if (isBefore(appointmentDate, Date.now())) {
+      throw new AppError('That time for appointment has already passed');
     }
 
     const newAppointment = await this.AppointmentsRepository.create({
