@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 // Eu adicionei este import acima para resolver problema nos testes jest, deixar em observação esta linha
-import { startOfHour, isBefore } from 'date-fns';
+import { startOfHour, getHours, isBefore } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -31,11 +31,24 @@ class CreateAppointmentService {
     );
 
     if (checkDuplicateSchedule) {
-      throw new AppError('This appointment time is already booked');
+      throw new AppError('This appointment time is already booked.');
     }
 
     if (isBefore(appointmentDate, Date.now())) {
-      throw new AppError('That time for appointment has already passed');
+      throw new AppError('That time for appointment has already passed.');
+    }
+
+    if (user_id === provider_id) {
+      throw new AppError(
+        'Not permitted to create an appointment with yourself.'
+      );
+    }
+
+    const hourBoundryCheck = getHours(date);
+    if (hourBoundryCheck < 7 || hourBoundryCheck > 17) {
+      throw new AppError(
+        'Selected hour is outside of daily schedule boundries'
+      );
     }
 
     const newAppointment = await this.AppointmentsRepository.create({
