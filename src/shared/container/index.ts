@@ -6,6 +6,9 @@ import IAppointmentRepository from '@modules/appointments/repositories/IAppointm
 import IUsersRepositories from '@modules/users/repositories/IUsersRepositories';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import NotificationsRepositories from '@modules/notifications/infra/typeorm/repositories/NotificationsRepositories';
+
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 import BCryptHashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
@@ -51,4 +54,9 @@ container.registerSingleton<IMailTemplateProvider>(
 container.registerInstance<IMailingProvider>(
   'MailingProvider',
   container.resolve(EtherealMailingProvider)
+);
+
+container.registerSingleton<INotificationsRepository>(
+  'NotificationsRepository',
+  NotificationsRepositories
 );
