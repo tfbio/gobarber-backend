@@ -18,7 +18,7 @@ export default class AddUserIdToAppointments1596922295276
     );
 
     await queryRunner.createForeignKey(
-      'appointmentUser',
+      'appointments',
       new TableForeignKey({
         name: 'appointmentUser',
         columnNames: ['user_id'],
