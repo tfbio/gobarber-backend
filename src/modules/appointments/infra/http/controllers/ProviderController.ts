@@ -12,6 +12,10 @@ export default class ProviderController {
       user_id,
     });
 
+    providersList.forEach(eachProvider => {
+      delete eachProvider.password;
+    });
+
     return response.status(200).json(providersList);
   }
 }
