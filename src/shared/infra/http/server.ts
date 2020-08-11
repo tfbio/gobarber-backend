@@ -4,6 +4,7 @@ import 'express-async-errors';
 import cors from 'cors';
 
 import uploadConfig from '@config/upload';
+import { errors } from 'celebrate';
 import AppError from '@shared/errors/AppError';
 
 import '@shared/infra/typeorm';
@@ -16,6 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.uploadFolder));
 app.use(routes);
+
+app.use(errors());
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {
