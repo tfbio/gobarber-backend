@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import ListProviderService from '@modules/appointments/services/ListProviderService';
+import { classToClass } from 'class-transformer';
 
 export default class ProviderController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -12,10 +13,6 @@ export default class ProviderController {
       user_id,
     });
 
-    providersList.forEach(eachProvider => {
-      delete eachProvider.password;
-    });
-
-    return response.status(200).json(providersList);
+    return response.status(200).json(classToClass(providersList));
   }
 }
