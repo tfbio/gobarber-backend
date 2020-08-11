@@ -11,7 +11,9 @@ const appointmentController = new AppointmentController();
 const providerAppointmentsController = new ProviderAppointmentsController();
 appointmentsRouter.use(ensureAuthenticate);
 
-appointmentsRouter.get(
+appointmentsRouter.get('/', appointmentController.index);
+
+appointmentsRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -19,10 +21,8 @@ appointmentsRouter.get(
       date: Joi.date().required(),
     },
   }),
-  appointmentController.index
+  appointmentController.create
 );
-
-appointmentsRouter.post('/', appointmentController.create);
 
 appointmentsRouter.get('/me', providerAppointmentsController.index);
 
