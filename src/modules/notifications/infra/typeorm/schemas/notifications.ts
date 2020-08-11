@@ -1,5 +1,4 @@
 import {
-  ObjectID,
   ObjectIdColumn,
   Entity,
   Column,
@@ -7,10 +6,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ObjectId } from 'mongodb';
+
 @Entity('notifications')
 class Notifications {
   @ObjectIdColumn()
-  id: ObjectID;
+  id: ObjectId;
 
   @Column()
   content: string;
@@ -25,7 +26,7 @@ class Notifications {
   created_at: Date;
 
   @UpdateDateColumn()
-  update_at: Date;
+  updated_at: Date;
 }
 
 export default Notifications;
