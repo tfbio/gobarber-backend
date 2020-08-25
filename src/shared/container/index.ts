@@ -24,6 +24,9 @@ import IUsersToken from '@modules/users/repositories/IUserTokensRepositories';
 import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
 import HandlebarsMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/implementations/HandlebarsMailTemplateProvider';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import RedisCacheProvider from '@shared/container/providers/CacheProvider/implementations/RedisCacheProvider';
+
 container.registerSingleton<IAppointmentRepository>(
   'AppointmentsRepository',
   AppointmentsRepository
@@ -59,4 +62,9 @@ container.registerInstance<IMailingProvider>(
 container.registerSingleton<INotificationsRepository>(
   'NotificationsRepository',
   NotificationsRepositories
+);
+
+container.registerSingleton<ICacheProvider>(
+  'CacheProvider',
+  RedisCacheProvider
 );

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import { injectable, inject } from 'tsyringe';
 
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 import Appointment from '../infra/typeorm/entities/Appointments';
 
@@ -16,7 +17,10 @@ interface IRequest {
 class ListProviderAppointmentsService {
   constructor(
     @inject('AppointmentsRepository')
-    private appointmentsRepository: IAppointmentsRepository
+    private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   public async execute({
@@ -32,6 +36,7 @@ class ListProviderAppointmentsService {
       year,
     });
 
+    await this.cacheProvider.save('key_string', 'cached_info');
     return appointmentsList;
   }
 }
