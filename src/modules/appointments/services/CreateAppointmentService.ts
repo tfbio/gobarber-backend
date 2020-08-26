@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-// Eu adicionei este import acima para resolver problema nos testes jest, deixar em observação esta linha
+
 import { startOfHour, getHours, isBefore, format } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import Appointment from '../infra/typeorm/entities/Appointments';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
@@ -22,7 +23,10 @@ class CreateAppointmentService {
     private appointmentsRepository: IAppointmentsRepository,
 
     @inject('NotificationsRepository')
-    private notificationsRepository: INotificationsRepository
+    private notificationsRepository: INotificationsRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   public async execute({
@@ -67,6 +71,13 @@ class CreateAppointmentService {
       content: `New appointment created to date ${formattedDate}`,
       recipient_id: provider_id,
     });
+
+    await this.cacheProvider.invalidate(
+      `provider-appointments-list:${provider_id}:${format(
+        appointmentDate,
+        'yyyy-M-d'
+      )}`
+    );
 
     return newAppointment;
   }

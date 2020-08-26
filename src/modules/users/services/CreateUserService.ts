@@ -40,6 +40,9 @@ class CreateUserService {
       password: hashedPassword,
       email,
     });
+
+    await this.cacheProvider.invalidatePrefix('providers-list');
+
     return newUser;
   }
 }
