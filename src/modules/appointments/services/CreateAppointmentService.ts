@@ -36,7 +36,8 @@ class CreateAppointmentService {
   }: IRequestDTO): Promise<Appointment> {
     const appointmentDate = startOfHour(date);
     const checkDuplicateSchedule = await this.appointmentsRepository.findByDate(
-      appointmentDate
+      appointmentDate,
+      provider_id
     );
 
     if (checkDuplicateSchedule) {
