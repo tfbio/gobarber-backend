@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { getDaysInMonth, getDate } from 'date-fns';
+import { getDaysInMonth, getDate, isAfter } from 'date-fns';
 
 import { injectable, inject } from 'tsyringe';
 
@@ -41,12 +41,15 @@ class ListProviderMonthlyAvailabilityService {
     );
 
     const availability = forEachDayArray.map(day => {
+      const comparedDate = new Date(year, month - 1, day, 23, 59, 59);
+
       const appointmentsInDay = appointments.filter(appointment => {
         return getDate(appointment.date) === day;
       });
 
       return {
-        availability: appointmentsInDay.length < 11,
+        availability:
+          isAfter(comparedDate, new Date()) && appointmentsInDay.length < 11,
         day,
       };
     });
