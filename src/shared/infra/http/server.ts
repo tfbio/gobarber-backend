@@ -38,6 +38,4 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-app.listen(3333, () => {
-  console.log('server running at 3333');
-});
+app.listen(3333);
