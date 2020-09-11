@@ -5,6 +5,7 @@ import uploadConfig from '@config/upload';
 import IStorageProvider from '../models/IStorageProvider';
 
 class LocalDiskStorageProvider implements IStorageProvider {
+  /*
   public async saveFile(fileName: string): Promise<string> {
     fs.promises.rename(
       path.resolve(uploadConfig.tempFolder, fileName),
@@ -13,9 +14,9 @@ class LocalDiskStorageProvider implements IStorageProvider {
 
     return fileName;
   }
-
+  */
   public async deleteFile(fileName: string): Promise<void> {
-    const filePath = path.resolve(uploadConfig.uploadFolder, fileName);
+    const filePath = path.resolve(uploadConfig.uploads, fileName);
 
     try {
       await fs.promises.stat(filePath);

@@ -34,7 +34,7 @@ class Users {
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {
-    return this.avatar ? `${process.env.APP_API_URL}/tmp/${this.avatar}` : null;
+    return this.avatar ? `${process.env.APP_API_URL}/${this.avatar}` : null;
   }
 }
 

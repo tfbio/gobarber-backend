@@ -27,16 +27,16 @@ class UpdateUserImageService {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
-      throw new AppError('Only for authenticated users.');
+      throw new AppError('Only for authenticated users.', 401);
     }
 
     if (user.avatar) {
       await this.storageProvider.deleteFile(user.avatar);
     }
 
-    const updatedFilename = await this.storageProvider.saveFile(avatarFilename);
+    // const updatedFilename = await this.storageProvider.saveFile(avatarFilename);
 
-    user.avatar = updatedFilename;
+    user.avatar = avatarFilename;
     await this.usersRepository.save(user);
 
     return user;
